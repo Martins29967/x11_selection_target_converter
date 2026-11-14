@@ -33,3 +33,10 @@ The trade-off is deliberate: unknown atoms and MIME types are returned unchanged
 ## Edge cases
 
 Lookups are case-insensitive: `atom_to_mime("utf8_string")` and `mime_to_atom("TEXT/PLAIN")` both work. MIME parameters are compared as exact strings, so `text/plain; charset=utf-8` (with a space after the semicolon) is not recognized and is returned unchanged. If you need that form to match, normalize it before calling.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
